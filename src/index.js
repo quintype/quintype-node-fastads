@@ -1,4 +1,4 @@
-(function (global) {
+function fastads(global) {
   global.googletag = global.googletag || { cmd: [] };
 
   const observer = new MutationObserver(callback);
@@ -14,7 +14,7 @@
     const affectedNodes = [];
 
     // Ugly ES5 way for compatibility and performance
-    for (const { type, target, addedNodes } of mutations) {
+    for (const { type, addedNodes } of mutations) {
       if (type === "childList") {
         for (const node of addedNodes) {
           if (node.tagName === "DIV" && node.getAttribute("data-dfp")) {
@@ -37,6 +37,7 @@
 
       for (const node of nodes) {
         if (node.id) {
+          // Probably already have a dfp widget there
           continue;
         }
 
@@ -61,4 +62,7 @@
       }
     })
   }
-})(window)
+}
+
+// Keep this here, this gets removed during build
+module.exports = fastads;
