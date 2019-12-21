@@ -4,7 +4,20 @@ Fastads is a library for fast loading of DFP ads. This library uses MutationObse
 
 ## Usage
 
+* Add gpt via the default gpt script, or via gtm
+
+```html
+<script async="async" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+```
+
 * Copy the contents of [dist/fastads.js](dist/fastads.js) into a script tag at the top of the body
+
+```html
+<script>
+  // Contents of dist/fastads.js here
+</script>
+```
+
 * Wherever you are placing a dfp tag, use the following syntax
 
 ```html
@@ -19,3 +32,4 @@ Fastads is a library for fast loading of DFP ads. This library uses MutationObse
 |----------------|---------------------------------------------------------|------------------------------------------|------------|
 | data-dfp | Ad Unit Id | 3849069/Large_Leaderboard | yes |
 | data-dfp-sizes | Sizes for the Ad (must be the same as specified in DFP) | [[970,90],[728,90],[320,100],[320,50]] | yes |
+| data-dfp-sizemapping | Viewport to size mapping. This accept pairs that are accepted by [SizeMappingBuilder](https://developers.google.com/doubleclick-gpt/reference#googletag.PubAdsService_enableLazyLoad) | [[[1024,768],[970,250]],[[640,480],'fluid'],[[0,0],[[1024,768],[970,250]]]] | no |
