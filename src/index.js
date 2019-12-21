@@ -33,7 +33,7 @@ function enableDfp(nodes) {
     return;
   }
 
-  googletag.cmd.push(function () {
+  global.googletag.cmd.push(function () {
     const slots = [];
 
     for (const node of nodes) {
@@ -53,23 +53,34 @@ function enableDfp(nodes) {
       }
     }
 
-    googletag.pubads().enableLazyLoad({
-      fetchMarginPercent: 500,  // Fetch slots within 5 viewports.
-      renderMarginPercent: 200,  // Render slots within 2 viewports.
-      mobileScaling: 2.0  // Double the above values on mobile.
-    });
-    googletag.enableServices();
+    const {
+      fetchMarginPercent = 500,
+      renderMarginPercent = 200,
+      mobileScaling = 2.0,
+      disableLazy = false
+    } = global.FASTAD_CONFIG || {};
+
+    if(disableLazy) {
+      global.googletag.enableSingleRequest();
+    } else {
+      global.googletag.pubads().enableLazyLoad({
+        fetchMarginPercent,
+        renderMarginPercent,
+        mobileScaling
+      });
+    }
+    global.googletag.enableServices();
 
     for (const slot of slots) {
-      googletag.display(slot);
+      global.googletag.display(slot);
     }
   })
 }
 
 function buildSlot(node, nodeId) {
-  let slot = googletag.defineSlot(node.getAttribute("data-dfp"), JSON.parse(node.getAttribute("data-dfp-size")), nodeId);
+  let slot = global.googletag.defineSlot(node.getAttribute("data-dfp"), JSON.parse(node.getAttribute("data-dfp-size")), nodeId);
 
-  slot = slot.addService(googletag.pubads());
+  slot = slot.addService(global.googletag.pubads());
 
   const sizeMapping = node.getAttribute("data-dfp-sizemapping");
   if (sizeMapping) {
