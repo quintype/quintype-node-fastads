@@ -16,6 +16,12 @@ Fastads is a library for fast loading of DFP ads. This library uses MutationObse
 <script data-version="@quintype/fastads@1.0.0">// Contents of dist/fastads.js here</script>
 ```
 
+* Alternatively, you may use the script directly from jsdelivr, or you may inline the contents of the script
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@quintype/fastads@1/dist/fastads.js"></script>
+```
+
 * Wherever you are placing a dfp tag, use the following syntax
 
 ```html
