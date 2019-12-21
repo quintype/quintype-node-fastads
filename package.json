@@ -20,6 +20,12 @@
     "@babel/cli": "^7.7.7",
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
+    "husky": "^3.1.0",
     "terser": "^4.4.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "make"
+    }
   }
 }
