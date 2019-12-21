@@ -10,12 +10,10 @@ Fastads is a library for fast loading of DFP ads. This library uses MutationObse
 <script async="async" src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
 ```
 
-* Copy the contents of [dist/fastads.js](dist/fastads.js) into a script tag at the top of the body
+* Copy the contents of [dist/fastads.html](dist/fastads.html) into a script tag at the top of the body.
 
 ```html
-<script>
-  // Contents of dist/fastads.js here
-</script>
+<script data-version="@quintype/fastads@1.0.0">// Contents of dist/fastads.js here</script>
 ```
 
 * Wherever you are placing a dfp tag, use the following syntax
