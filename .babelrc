@@ -1,0 +1,4 @@
+{
+  "plugins": [["@babel/plugin-transform-for-of", { "assumeArray": true }]],
+  "presets": [["@babel/preset-env", { "modules": false }]]
+}
