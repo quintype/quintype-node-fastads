@@ -95,6 +95,11 @@ function buildSlot(node, nodeId) {
     slot = slot.defineSizeMapping(JSON.parse(sizeMapping));
   }
 
+  const collapse = node.getAttribute("data-dfp-collapse");
+  if(collapse) {
+    slot = slot.setCollapseEmptyDiv(JSON.parse(collapse));
+  }
+
   return slot;
 }
 
