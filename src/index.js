@@ -17,15 +17,21 @@ function mutationCallback(mutations) {
   // Ugly ES5 way for compatibility and performance
   for (const { type, addedNodes } of mutations) {
     if (type === "childList") {
-      for (const node of addedNodes) {
-        if (node.tagName === "DIV" && node.getAttribute("data-dfp")) {
-          affectedNodes.push(node);
-        }
-      }
+      pushAddedNodesToList(affectedNodes, addedNodes);
     }
   }
 
   enableDfp(affectedNodes);
+}
+
+function pushAddedNodesToList(affectedNodes, nodeList) {
+  for (const node of nodeList) {
+    if (node.tagName === "DIV" && node.getAttribute("data-dfp")) {
+      affectedNodes.push(node);
+    } else if(node.childNodes) {
+      pushAddedNodesToList(affectedNodes, node.childNodes);
+    }
+  }
 }
 
 function enableDfp(nodes) {
