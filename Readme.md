@@ -37,3 +37,4 @@ Fastads is a library for fast loading of DFP ads. This library uses MutationObse
 | data-dfp | Ad Unit Id | 3849069/Large_Leaderboard | yes |
 | data-dfp-sizes | Sizes for the Ad (must be the same as specified in DFP) | [[970,90],[728,90],[320,100],[320,50]] | yes |
 | data-dfp-sizemapping | Viewport to size mapping. This accept pairs that are accepted by [SizeMappingBuilder](https://developers.google.com/doubleclick-gpt/reference#googletag.PubAdsService_enableLazyLoad) | [[[1024,768],[970,250]],[[640,480],'fluid'],[[0,0],[[1024,768],[970,250]]]] | no |
+| data-dfp-targeting | Array of targetting rules. Since targetting rules are global, it's sufficient to set the targetting rules on any one ad | [["story-type","text"],["sponsored-by","me"]] | no |

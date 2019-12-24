@@ -80,7 +80,15 @@ function enableDfp(nodes) {
 function buildSlot(node, nodeId) {
   let slot = global.googletag.defineSlot(node.getAttribute("data-dfp"), JSON.parse(node.getAttribute("data-dfp-size")), nodeId);
 
-  slot = slot.addService(global.googletag.pubads());
+  const service = global.googletag.pubads();
+  const targeting = node.getAttribute("data-dfp-targeting");
+  if(targeting) {
+    for(const [key, value] of JSON.parse(targeting)) {
+      service.setTargeting(key, value)
+    }
+  }
+
+  slot = slot.addService(service);
 
   const sizeMapping = node.getAttribute("data-dfp-sizemapping");
   if (sizeMapping) {
