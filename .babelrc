@@ -1,7 +1,8 @@
 {
   "plugins": [
     ["@babel/plugin-transform-for-of", { "assumeArray": true }],
-    ["@babel/plugin-transform-destructuring", {"loose": true}]
+    ["@babel/plugin-transform-destructuring", {"loose": true}],
+    ["@babel/plugin-transform-template-literals", {"loose": true}]
   ],
   "presets": [["@babel/preset-env", { "modules": false }]]
 }

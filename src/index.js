@@ -1,14 +1,19 @@
+// Over optimizations that no one asked for
+const ATTRIBUTE = 'data-dfp';
+const parse = JSON.parse;
+
 function fastads(global) {
   global.googletag = global.googletag || { cmd: [] };
+  const document = global.document;
 
   const observer = new MutationObserver(mutationCallback);
-  observer.observe(global.document.body, {
+  observer.observe(document.body, {
     subtree: true,
     childList: true
   });
 
   // Start DFP on existing nodes
-  enableDfp(global.document.querySelectorAll("div[data-dfp]"));
+  enableDfp(document.querySelectorAll(`div[${ATTRIBUTE}]`));
 }
 
 function mutationCallback(mutations) {
@@ -26,9 +31,9 @@ function mutationCallback(mutations) {
 
 function pushAddedNodesToList(affectedNodes, nodeList) {
   for (const node of nodeList) {
-    if (node.tagName === "DIV" && node.getAttribute("data-dfp")) {
+    if (node.tagName === "DIV" && node.getAttribute(ATTRIBUTE)) {
       affectedNodes.push(node);
-    } else if(node.childNodes) {
+    } else if(node.childNodes.length) {
       pushAddedNodesToList(affectedNodes, node.childNodes);
     }
   }
@@ -40,6 +45,7 @@ function enableDfp(nodes) {
   }
 
   global.googletag.cmd.push(function () {
+    const googletag = global.googletag;
     const slots = [];
 
     for (const node of nodes) {
@@ -52,58 +58,53 @@ function enableDfp(nodes) {
       node.id = nodeId;
 
       try {
-        slots.push(buildSlot(node, nodeId));
+        slots.push(buildSlot(googletag, node, nodeId));
       } catch (e) {
         console.error(`FastAds: Error while building slot ${nodeId}`);
         console.error(e);
       }
     }
 
-    const {
-      fetchMarginPercent = 500,
-      renderMarginPercent = 200,
-      mobileScaling = 2.0,
-      disableLazy = false
-    } = global.FASTAD_CONFIG || {};
+    const config = global.FASTAD_CONFIG || {};
 
-    if(disableLazy) {
-      global.googletag.enableSingleRequest();
+    if(config.disableLazy) {
+      googletag.enableSingleRequest();
     } else {
-      global.googletag.pubads().enableLazyLoad({
-        fetchMarginPercent,
-        renderMarginPercent,
-        mobileScaling
+      googletag.pubads().enableLazyLoad({
+        fetchMarginPercent: config.fetchMarginPercent || 500,
+        renderMarginPercent: config.renderMarginPercent || 200,
+        mobileScaling: config.mobileScaling || 2
       });
     }
-    global.googletag.enableServices();
+    googletag.enableServices();
 
     for (const slot of slots) {
-      global.googletag.display(slot);
+      googletag.display(slot);
     }
   })
 }
 
-function buildSlot(node, nodeId) {
-  let slot = global.googletag.defineSlot(node.getAttribute("data-dfp"), JSON.parse(node.getAttribute("data-dfp-size")), nodeId);
+function buildSlot(googletag, node, nodeId) {
+  let slot = googletag.defineSlot(node.getAttribute(ATTRIBUTE), parse(node.getAttribute(`${ATTRIBUTE}-size`)), nodeId);
 
-  const service = global.googletag.pubads();
-  const targeting = node.getAttribute("data-dfp-targeting");
+  const service = googletag.pubads();
+  const targeting = node.getAttribute(`${ATTRIBUTE}-targeting`);
   if(targeting) {
-    for(const [key, value] of JSON.parse(targeting)) {
+    for(const [key, value] of parse(targeting)) {
       service.setTargeting(key, value)
     }
   }
 
   slot = slot.addService(service);
 
-  const sizeMapping = node.getAttribute("data-dfp-sizemapping");
+  const sizeMapping = node.getAttribute(`${ATTRIBUTE}-sizemapping`);
   if (sizeMapping) {
-    slot = slot.defineSizeMapping(JSON.parse(sizeMapping));
+    slot = slot.defineSizeMapping(parse(sizeMapping));
   }
 
-  const collapse = node.getAttribute("data-dfp-collapse");
+  const collapse = node.getAttribute(`${ATTRIBUTE}-collapse`);
   if(collapse) {
-    slot = slot.setCollapseEmptyDiv(JSON.parse(collapse));
+    slot = slot.setCollapseEmptyDiv(parse(collapse));
   }
 
   return slot;
